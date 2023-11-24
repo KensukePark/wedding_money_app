@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'add_screen.dart';
+import 'loading_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.result}) : super(key: key);
@@ -12,12 +13,250 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var f = NumberFormat('###,###,###,###');
+  int price_boy = 0;
+  int price_girl = 0;
   List<String> temp_list = [];
+  List<bool> _boolean = [false, false];
+  void add_dialog() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            backgroundColor: Color(0xffFEFAF8),
+            child: Container(
+                width: 150,
+                height: 150,
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '신랑측/신부측 선택',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ToggleButtons(
+                          children: <Widget>[
+                            Icon(Icons.man, size: 64,),
+                            Icon(Icons.woman, size: 64,),
+                          ],
+                          onPressed: (int index) {
+                            if (index == 0) {
+                              Navigator.pop(context);
+                              add_boy();
+                            }
+                            else {
+                              Navigator.pop(context);
+                              add_girl();
+                            }
+                          },
+                          isSelected: _boolean,
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          );
+        }
+    );
+  }
+  void add_boy() {
+    var name = '';
+    var relation = '신랑측';
+    var price = '';
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+                width: 150,
+                height: 250,
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '신랑측 추가',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        hintText: '이름',
+                      ),
+                      onChanged: (value) {
+                        name = value;
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: '금액(만원)',
+                      ),
+                      onChanged: (value) {
+                        price = value;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("취소"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(100,40),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (name != '' && price != '') {
+                                var prefs = await SharedPreferences.getInstance();
+                                String now_time = DateFormat('HH:mm').format(DateTime.now());
+                                setState(() {
+                                  temp_list.add((temp_list.length~/5+1).toString());
+                                  temp_list.add(name);
+                                  temp_list.add(relation);
+                                  temp_list.add(price);
+                                  temp_list.add(now_time);
+                                  prefs.setStringList('list', temp_list);
+                                });
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute (builder: (BuildContext context) => LoadingPage()), (route) => false);
+                              }
+                            },
+                            child: const Text("추가"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(100,40),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          );
+        }
+    );
+  }
+  void add_girl() {
+    var name = '';
+    var relation = '신부측';
+    var price = '';
+    var now_time;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+                width: 150,
+                height: 250,
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '신부측 추가',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.name,
+                      decoration: const InputDecoration(
+                        hintText: '이름',
+                      ),
+                      onChanged: (value) {
+                        name = value;
+                      },
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: '금액(만원)',
+                      ),
+                      onChanged: (value) {
+                        price = value;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("취소"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(100,40),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (name != '' && price != '') {
+                                var prefs = await SharedPreferences.getInstance();
+                                String now_time = DateFormat('HH:mm').format(DateTime.now());
+                                setState(() {
+                                  temp_list.add((temp_list.length~/5+1).toString());
+                                  temp_list.add(name);
+                                  temp_list.add(relation);
+                                  temp_list.add(price);
+                                  temp_list.add(now_time);
+                                  prefs.setStringList('list', temp_list);
+                                });
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute (builder: (BuildContext context) => LoadingPage()), (route) => false);
+                              }
+                            },
+                            child: const Text("추가"),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(100,40),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )),
+          );
+        }
+    );
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     temp_list = widget.result;
+    if (temp_list.length != 0) {
+      for (int i=0; i<temp_list.length~/5; i++) {
+        if (temp_list[i*5+2] == '신랑측') {
+          price_boy+=int.parse(temp_list[i*5+3]);
+        }
+        else {
+          price_girl+=int.parse(temp_list[i*5+3]);
+        }
+      }
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -63,7 +302,8 @@ class _HomePageState extends State<HomePage> {
             // temp_list.add('14:04');
             // prefs.setStringList('list', temp_list);
           });
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddPage()));
+          add_dialog();
+          //Navigator.push(context, MaterialPageRoute(builder: (context) => AddPage()));
         },
       ),
       body: SafeArea(
@@ -271,7 +511,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1),
                         ),
-                        child: Center(child: Text('신부측',style: TextStyle(
+                        child: Center(child: Text('신랑측',style: TextStyle(
                           fontSize: 18,
                         ),)),
 
@@ -282,7 +522,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1),
                         ),
-                        child: Center(child: Text('1,200,000 원',style: TextStyle(
+                        child: Center(child: Text('${f.format(10000*price_boy)} 원',style: TextStyle(
                           fontSize: 18,
                         ),)),
                       ),
@@ -297,7 +537,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1),
                         ),
-                        child: Center(child: Text('신랑측',style: TextStyle(
+                        child: Center(child: Text('신부측',style: TextStyle(
                           fontSize: 18,
                         ),)),
 
@@ -308,7 +548,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1),
                         ),
-                        child: Center(child: Text('0 원',style: TextStyle(
+                        child: Center(child: Text('${f.format(10000*price_girl)} 원',style: TextStyle(
                           fontSize: 18,
                         ),)),
                       ),
@@ -334,7 +574,7 @@ class _HomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           border: Border.all(width: 1),
                         ),
-                        child: Center(child: Text('1,200,000 원',style: TextStyle(
+                        child: Center(child: Text('${f.format(10000*price_girl+10000*price_boy)} 원',style: TextStyle(
                           fontSize: 18,
                         ),)),
                       ),
