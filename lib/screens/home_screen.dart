@@ -264,6 +264,16 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('축의금 관리'),
         backgroundColor: const Color.fromRGBO(163, 122, 68, 109),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () async {
+            var prefs = await SharedPreferences.getInstance();
+            prefs.clear();
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute (builder: (BuildContext context) => LoadingPage()), (route) => false);
+        }, icon: Icon(Icons.autorenew)),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.upload)),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(163, 122, 68, 109),
