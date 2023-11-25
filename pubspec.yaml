@@ -49,6 +49,7 @@ dev_dependencies:
   wakelock:
   shared_preferences:
   intl:
+  csv:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

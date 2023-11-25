@@ -1,8 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'add_screen.dart';
+import 'package:csv/csv.dart';
 import 'loading_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   int price_girl = 0;
   List<String> temp_list = [];
   List<bool> _boolean = [false, false];
+
   void add_dialog() {
     showDialog(
         context: context,
@@ -272,7 +272,28 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute (builder: (BuildContext context) => LoadingPage()), (route) => false);
         }, icon: Icon(Icons.autorenew)),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.upload)),
+          IconButton(onPressed: () {
+            List<List<dynamic>> rows = [];
+            List<dynamic> row = [];
+            row.add('순번');
+            row.add('이름');
+            row.add('관계');
+            row.add('금액');
+            row.add('시간');
+            rows.add(row);
+            for (int i=0; i<temp_list.length~/5; i++) {
+              row = [];
+              row.add(temp_list[i*5]);
+              row.add(temp_list[i*5+1]);
+              row.add(temp_list[i*5+2]);
+              row.add(temp_list[i*5+3]);
+              row.add(temp_list[i*5+4]);
+              rows.add(row);
+            }
+            String csv = const ListToCsvConverter().convert(rows);
+
+
+          }, icon: Icon(Icons.upload)),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -283,37 +304,7 @@ class _HomePageState extends State<HomePage> {
           var prefs = await SharedPreferences.getInstance();
           //prefs.clear();
           String now_time = DateFormat('HH:mm').format(DateTime.now());
-          setState(() {
-            // temp_list.add((temp_list.length~/5+1).toString());
-            // temp_list.add('유이');
-            // temp_list.add('신부측');
-            // temp_list.add('10');
-            // //temp_list.add(now_time);
-            // temp_list.add('13:58');
-            // temp_list.add((temp_list.length~/5+1).toString());
-            // temp_list.add('박현영');
-            // temp_list.add('신부측');
-            // temp_list.add('20');
-            // temp_list.add('13:59');
-            // temp_list.add((temp_list.length~/5+1).toString());
-            // temp_list.add('김병양');
-            // temp_list.add('신부측');
-            // temp_list.add('30');
-            // temp_list.add('14:02');
-            // temp_list.add((temp_list.length~/5+1).toString());
-            // temp_list.add('박진영');
-            // temp_list.add('신부측');
-            // temp_list.add('30');
-            // temp_list.add('14:04');
-            // temp_list.add((temp_list.length~/5+1).toString());
-            // temp_list.add('김병기');
-            // temp_list.add('신부측');
-            // temp_list.add('30');
-            // temp_list.add('14:04');
-            // prefs.setStringList('list', temp_list);
-          });
           add_dialog();
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => AddPage()));
         },
       ),
       body: SafeArea(
