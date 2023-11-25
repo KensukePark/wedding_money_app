@@ -1,16 +1,14 @@
 # wedding_money_app
+Make wedding gift money management app
 
-A new Flutter project.
+# Environment
+Android Studio Electric Eel | 2022.1.1 Patch 1 <br>
+Flutter 3.10.2 <br>
+Dart 3.0.2 <br>
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Preview
+<p align="left">
+<img src="wedding_img_1.png" width="216" height="528"/>
+<img src="wedding_img_2.png" width="216" height="528"/>
+<img src="wedding_img_3.png" width="216" height="528"/>
+</p>

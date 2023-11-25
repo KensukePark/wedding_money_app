@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:csv/csv.dart';
 import 'loading_screen.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:cr_file_saver/file_saver.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:typed_data';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.result}) : super(key: key);
@@ -272,7 +278,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.pushAndRemoveUntil(context, MaterialPageRoute (builder: (BuildContext context) => LoadingPage()), (route) => false);
         }, icon: Icon(Icons.autorenew)),
         actions: [
-          IconButton(onPressed: () {
+          IconButton(onPressed: () async {
             List<List<dynamic>> rows = [];
             List<dynamic> row = [];
             row.add('순번');
@@ -291,8 +297,20 @@ class _HomePageState extends State<HomePage> {
               rows.add(row);
             }
             String csv = const ListToCsvConverter().convert(rows);
-
-
+            Directory appDocDirectory = await getApplicationDocumentsDirectory();
+            String temp_name = appDocDirectory.path + '/' + '${DateTime.now()}.csv';
+            File(temp_name).writeAsString(csv).then((value) async {
+              print(value);
+              final file = await CRFileSaver.saveFileWithDialog(
+                SaveFileDialogParams(
+                    sourceFilePath: temp_name, //App폴더에 저장한 임시 사진을 Source로 이용
+                    destinationFileName: 'wedding_data.csv'
+                ),
+              ).then((value2) {
+                print(value2);
+                //App폴더안에 임시 저장한 사진 삭제
+              });
+            });
           }, icon: Icon(Icons.upload)),
         ],
       ),
