@@ -10,5 +10,7 @@ Dart 3.0.2 <br>
 <p align="left">
 <img src="wedding_img_1.png" width="216" height="528"/>
 <img src="wedding_img_2.png" width="216" height="528"/>
-<img src="wedding_img_3.png" width="216" height="528"/>
+</p>
+<p align="left">
+<img src="wedding_img_3.png" width="464" height="323"/>
 </p>
